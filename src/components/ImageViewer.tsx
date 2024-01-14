@@ -5,7 +5,7 @@ interface PropsForImageViewer {
     images: FileList | null;
 }
 
-const ImageViewer = ({images,imagesUrl,handleDelete,handleSubmit}) => {
+const ImageViewer = ({coco,chosenCategory,setCoco,setChosenCategory,categories,images,imagesUrl}) => {
     const handleFiles = ()=>{
         for(let i =0;i<images.length;i++) {
             const file = images[i];
@@ -16,7 +16,7 @@ const ImageViewer = ({images,imagesUrl,handleDelete,handleSubmit}) => {
     return (
         <div>
             {imagesUrl.map((image, index) => (
-                <Image index={index} key={index} image={images[index]} imageUrl={image} handleDelete={handleDelete} handleSubmit={handleSubmit} />
+                <Image chosenCategory={chosenCategory} coco={coco} setCoco={setCoco} setChosenCategory={setChosenCategory} categories={categories} index={index} key={index} image={images[index]} imageUrl={image}/>
             ))}
         </div>
     );

@@ -36,6 +36,7 @@ h1 {
 }
 
 button {
+  margin: 5px 0 5px 0;
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -65,4 +66,20 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+p {
+  font-weight: bold; /* Pogrubienie tekstu */
+  margin-bottom: 5px; /* Margines dolny, aby oddzielić paragrafy */
+}
+
+p:first-child {
+  font-size: 24px; 
 }

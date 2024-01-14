@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 
-const Form = ({imageUrl,index,image,handleSubmit,handleDelete}) => {
+const Form = ({image,handleSubmit,handleDelete}) => {
     return (
         <form>
             <button onClick={()=>handleSubmit} >Zatwierdz</button>

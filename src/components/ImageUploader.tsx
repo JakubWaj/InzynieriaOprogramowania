@@ -5,10 +5,11 @@ interface PropsForImageUploader {
     setImages: React.Dispatch<React.SetStateAction<FileList | null>>;
 }
 
-const ImageUploader = ({images,setImages}) => {
+const ImageUploader = ({images,setImages,setIsImageSelected}) => {
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
         setImages(files);
+        setIsImageSelected(true);
     }
     
     return (
