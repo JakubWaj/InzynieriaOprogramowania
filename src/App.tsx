@@ -6,7 +6,7 @@ import DatasetName from "./components/DatasetName.tsx";
 import Categories from "./components/Categories.tsx";
 import Category from "./components/Category.tsx";
 import ButtonCoco from "./components/ButtonCoco.tsx";
-
+import logo from './assets/logo.png';
 function App() {
     
   const [coco, setCoco] = useState<
@@ -141,6 +141,7 @@ function App() {
     }
   return (
     <div className="App">
+        <img src={logo} alt="logo" style={{top:0,right:0,height:"auto",position:"fixed"}}></img>
         <DatasetName handleDatasetName={handleDatasetName} setName={setName} name={name}></DatasetName>
          <Categories handleCategory={handleCategory} category={category} setCategory={setCategory}></Categories>
         {!isImageSelected && <ImageUploader setIsImageSelected={setIsImageSelected} images={selectedImages}  setImages={setSelectedImages} />}
