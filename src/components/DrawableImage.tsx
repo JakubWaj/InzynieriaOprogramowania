@@ -6,6 +6,30 @@ import Category from "./Category.tsx";
 
 const DrawableImage = ({coco,chosenCategory,setCoco,categories,setChosenCategory,image,imageUrl,index})=> {
     const [category,setCategory] = useState<string>('');
+    const [color,setColor] = useState<string>("red");
+    
+    
+    
+    useEffect(() => {
+        if (category===categories[0])
+            setColor("red")
+        if (category===categories[1])
+            setColor("blue")
+        if (category===categories[2])
+            setColor("green")
+        if (category===categories[3])
+            setColor("yellow")
+        if (category===categories[4])
+            setColor("purple")
+        if (category===categories[5])
+            setColor("orange")
+        if (category===categories[6])
+            setColor("brown")
+        if (category===categories[7])
+            setColor("pink")
+        if (category===categories[8])
+            setColor("black")
+    }, [category]);
     useEffect(() => {
         setCategory(categories[0])
     }, []);
@@ -107,10 +131,10 @@ const DrawableImage = ({coco,chosenCategory,setCoco,categories,setChosenCategory
             context.lineTo(point3.x, point3.y);
             context.lineTo(point4.x, point4.y);
             context.closePath();
-            context.strokeStyle = "red";
+            context.strokeStyle = color;
             context.lineWidth = 2;
             context.stroke();
-            setDraws([...draws,{x1:point1.x,y1:point1.y,x2:point2.x,y2:point2.y,x3:point3.x,y3:point3.y,x4:point4.x,y4:point4.y,color:"red"}])
+            setDraws([...draws,{x1:point1.x,y1:point1.y,x2:point2.x,y2:point2.y,x3:point3.x,y3:point3.y,x4:point4.x,y4:point4.y,color:color}])
             setAnnotations([...annotations,{coordinate:{x1:coordinates[0][0],y1:coordinates[0][1],x2:coordinates[1][0],y2:coordinates[1][1],x3:coordinates[2][0],y3:coordinates[2][1],x4:coordinates[3][0],y4:coordinates[3][1]},category:category}])
             console.log(category)
             console.log(coordinates[0][0])
