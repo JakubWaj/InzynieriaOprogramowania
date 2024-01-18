@@ -7,6 +7,7 @@ import Categories from "./components/Categories.tsx";
 import Category from "./components/Category.tsx";
 import ButtonCoco from "./components/ButtonCoco.tsx";
 import logo from './assets/logo.png';
+import CategoryList from "./components/CategoryList.tsx";
 function App() {
     
   const [coco, setCoco] = useState<
@@ -17,18 +18,9 @@ function App() {
           file_name:string,
           category_name:string,
           tags:{key:string,value:string}[],
-          position:
-              {
-                  x1:number,
-                  y1:number,
-                  x2:number,
-                  y2:number,
-                  x3:number,
-                  y3:number,
-                  x4:number,
-                  y4:number
-              }
+          position:{coordinate:{x1:number;y1:number;x2:number;y2:number;x3:number;y3:number;x4:number;y4:number;},category:string}[]
       }[]>([]);
+  const [setted, setSetted] = useState<boolean>(true);
   const [nameSetted, setNameSetted] = useState<boolean>(false);
   const [selectedImages, setSelectedImages] = useState<any[]>([]);
   const [selectedImagesURL, setSelectedImagesURL] = useState<string[]>([]);
@@ -65,8 +57,18 @@ function App() {
             });
         }
     }, [selectedImages]);
+
+    function calculateArea(x1, y1, x2, y2, x3, y3, x4, y4) {
+        const base1 = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+        const base2 = Math.sqrt(Math.pow(x4 - x3, 2) + Math.pow(y4 - y3, 2));
+        const height = Math.abs(y2 - y1); // Załóżmy, że wysokość bierze się z jednej z podstaw (możesz dostosować w zależności od potrzeb)
+
+        const area = 0.5 * (base1 + base2) * height;
+        return area;
+    }
     
     const handleJson= ()=>{
+        let uniqueid = 1;
         const object ={
             info : {
                 description: name,
@@ -94,17 +96,24 @@ function App() {
                 tags:image.tags
             }
         })
-        object.annotations = coco.map((image)=>{
-            return {
-                id:image.id,
-                image_id:image.id,
-                category_id:categories.indexOf(image.category_name)+1==0 ? 1 : categories.indexOf(image.category_name)+1,
-                segmentation:[[image.position.x1,image.position.y1],[image.position.x2,image.position.y2],[image.position.x3,image.position.y3],[image.position.x4,image.position.y4]],
-                area:0,
-                bbox:[0,0,0,0],
-                iscrowd:0
-            }
-        })
+        const objectAnnotations = coco.flatMap((image) => {
+            return image.position.map((pos) => {
+                return {
+                    id: uniqueid++,
+                    image_id: image.id,
+                    category_id: categories.indexOf(pos.category) + 1 === 0 ? 1 : categories.indexOf(pos.category) + 1,
+                    bbox: [
+                        [pos.coordinate.x1, pos.coordinate.y1],
+                        [pos.coordinate.x2, pos.coordinate.y2],
+                        [pos.coordinate.x3, pos.coordinate.y3],
+                        [pos.coordinate.x4, pos.coordinate.y4],
+                    ],
+                    area: calculateArea(pos.coordinate.x1, pos.coordinate.y1, pos.coordinate.x2, pos.coordinate.y2, pos.coordinate.x3, pos.coordinate.y3, pos.coordinate.x4, pos.coordinate.y4),
+                };
+            });
+        });
+
+        object.annotations = objectAnnotations;
         object.categories = categories.map((category,index)=>{
             return {
                 id:index+1,
@@ -139,15 +148,26 @@ function App() {
         console.log(name)
         setNameSetted(true)
     }
+    const handleEntry=(e)=>{
+        e.preventDefault();
+        setSetted(false)
+    }
   return (
     <div className="App">
-        <img src={logo} alt="logo" style={{top:0,right:0,height:"auto",position:"fixed"}}></img>
+        {/*<img src={logo} alt="logo" style={{top:0,right:0,height:"auto",position:"fixed"}}></img>*/}
+        { setted && <>
         <DatasetName handleDatasetName={handleDatasetName} setName={setName} name={name}></DatasetName>
          <Categories handleCategory={handleCategory} category={category} setCategory={setCategory}></Categories>
+            <CategoryList categories={categories}></CategoryList>
+    <form onSubmit={handleEntry}>
+            <button disabled={name.trim().length === 0 || categories.length===0}>Dalej</button>
+        </form></>}
+        { !setted&& <>
         {!isImageSelected && <ImageUploader setIsImageSelected={setIsImageSelected} images={selectedImages}  setImages={setSelectedImages} />}
         {selectedImages.length > 0 && 
       <ImageViewer coco={coco} chosenCategory={chosenCategory} setCoco={setCoco} setChosenCategory={setChosenCategory}  categories={categories} images={selectedImages} imagesUrl={selectedImagesURL}/>}
         <ButtonCoco exportToCoco={exportToCoco}></ButtonCoco>
+        </>}
     </div>
   )
 }

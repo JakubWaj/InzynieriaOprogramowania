@@ -5,34 +5,22 @@ import * as ExifReader from "exifreader";
 import Category from "./Category.tsx";
 
 const DrawableImage = ({coco,chosenCategory,setCoco,categories,setChosenCategory,image,imageUrl,index})=> {
-    console.log(chosenCategory)
+    const [category,setCategory] = useState<string>('');
+    useEffect(() => {
+        setCategory(categories[0])
+    }, []);
+    const [draws,setDraws] = useState<{x1:number;y1:number;x2:number;y2:number;x3:number;y3:number;x4:number;y4:number;color:string}[]>([]);
     const [coordinatess,setCoordinatess] = useState<{ x: number; y: number }[]>([]);
+    const [annotations,setAnnotations] = useState<{coordinate:{x1:number;y1:number;x2:number;y2:number;x3:number;y3:number;x4:number;y4:number;},category:string}[]>([])
     const handleSubmit = (e)=>{
         e.preventDefault()
-        if (i<4){
-            return
-        }
-        if (categories.length===0)
-            return;
-        if (chosenCategory === '')
-            return
         const newCoco = {
             id:index,
             width:tags['Image Width'].value,
             height:tags['Image Height'].value,
             file_name:image.name,
-            category_name:chosenCategory,
             tags:imgTags,
-            position: {
-                x1:coordinates[0][0],
-                y1:coordinates[0][1],
-                x2:coordinates[1][0],
-                y2:coordinates[1][1],
-                x3:coordinates[2][0],
-                y3:coordinates[2][1],
-                x4:coordinates[3][0],
-                y4:coordinates[3][1]
-            }
+            position: annotations
         }
         console.log(newCoco)
         setCoco([...coco,newCoco])
@@ -69,12 +57,7 @@ const DrawableImage = ({coco,chosenCategory,setCoco,categories,setChosenCategory
         }
     ,[])
     const test = ()=>{
-        console.log(tags['Image Height'].value)
         if (i<4) {
-            // @ts-ignore
-            console.log(event.offsetX);
-            // @ts-ignore
-            console.log(event.offsetY);
             // @ts-ignore
             if (event.offsetX>tags['Image Width'].value || event.offsetY>tags['Image Height'].value) {
                 console.log("nie")
@@ -103,14 +86,12 @@ const DrawableImage = ({coco,chosenCategory,setCoco,categories,setChosenCategory
     }, []);
 
     const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
+        test()
         const { clientX, clientY } = event;
         const rect = canvasRef.current?.getBoundingClientRect();
         const x = clientX - (rect?.left || 0);
         const y = clientY - (rect?.top || 0);
         setCoordinatess((prevPoints) => [...prevPoints, { x, y }]);
-        console.log("y")
-        console.log(coordinatess)
-        console.log("x")
         setRectanglePoints((prevPoints) => [...prevPoints, { x, y }]);
         if (rectanglePoints.length === 3) {
             setIsDrawing(true);
@@ -120,7 +101,6 @@ const DrawableImage = ({coco,chosenCategory,setCoco,categories,setChosenCategory
     const drawRectangle = () => {
         if (context && rectanglePoints.length === 4) {
             const [point1, point2, point3, point4] = rectanglePoints;
-            context.clearRect(0, 0, canvasRef.current?.width || 0, canvasRef.current?.height || 0);
             context.beginPath();
             context.moveTo(point1.x, point1.y);
             context.lineTo(point2.x, point2.y);
@@ -130,12 +110,50 @@ const DrawableImage = ({coco,chosenCategory,setCoco,categories,setChosenCategory
             context.strokeStyle = "red";
             context.lineWidth = 2;
             context.stroke();
+            setDraws([...draws,{x1:point1.x,y1:point1.y,x2:point2.x,y2:point2.y,x3:point3.x,y3:point3.y,x4:point4.x,y4:point4.y,color:"red"}])
+            setAnnotations([...annotations,{coordinate:{x1:coordinates[0][0],y1:coordinates[0][1],x2:coordinates[1][0],y2:coordinates[1][1],x3:coordinates[2][0],y3:coordinates[2][1],x4:coordinates[3][0],y4:coordinates[3][1]},category:category}])
+            console.log(category)
+            console.log(coordinates[0][0])
+            console.log(coordinates[0][1])
+            console.log(point1.x)
+            console.log(point1.y)
+            setCoordinates([[0,0],[0,0],[0,0],[0,0]])
+            setRectanglePoints([])
+            setI(0)
         }
     };
 
+    const drawRectangle2 = () => {
+            //remove last element from draws
+            draws.pop()
+            //remove last element from annotations
+            annotations.pop()
+            context.clearRect(0, 0, imageRef.current?.width || 0, imageRef.current?.height || 0)
+            for(let i =0;i<draws.length;i++) {
+            context.beginPath();
+            context.moveTo(draws[i].x1, draws[i].y1);
+            context.lineTo(draws[i].x2, draws[i].y2);
+            context.lineTo(draws[i].x3, draws[i].y3);
+            context.lineTo(draws[i].x4, draws[i].y4);
+            context.closePath();
+            context.strokeStyle = draws[i].color;
+            context.lineWidth = 2;
+            context.stroke();
+            }
+    };
+    
+    
+    useEffect(() => {
+        console.log(annotations)
+    }, [annotations]);
     useEffect(() => {
         drawRectangle();
     }, [rectanglePoints]);
+    
+    const handleRemove = (e)=> {
+        e.preventDefault();
+        drawRectangle2()
+    }
     return (
         <main>
             { !submit && <div style={{ position: "relative" ,display:"flex"}} >
@@ -145,29 +163,17 @@ const DrawableImage = ({coco,chosenCategory,setCoco,categories,setChosenCategory
                     alt={`Podgląd zdjęcia ${index+1}`}
                     style={{ position: "absolute", top: 0, left: 0 ,marginTop:"3em"}}
                 />
-                <canvas onClick={test}
+                <canvas 
                     ref={canvasRef}
                     width={imageRef.current?.width}
                     height={imageRef.current?.height}
                     onMouseDown={handleMouseDown}   
                     style={{ position: "absolute", top: 0, left: 0 ,marginTop:"3em"}}
                 ></canvas>
-                <div style={{position:"relative",marginTop:xd}}>
-                    <p>Zaznaczone koordynaty(X,Y):</p>
-                    <p>1:{coordinates[0][0]},{coordinates[0][1]}</p>
-                    <p>2:{coordinates[1][0]},{coordinates[1][1]}</p>
-                    <p>3:{coordinates[2][0]},{coordinates[2][1]}</p>
-                    <p>4:{coordinates[3][0]},{coordinates[3][1]}</p>
-                    {i>3 && <button onClick={(e)=>{
-                        e.preventDefault()
-                        setI(0)
-                        context?.clearRect(0, 0, canvasRef.current?.width || 0, canvasRef.current?.height || 0);
-                        setRectanglePoints([])
-                        setCoordinatess(coordinatess.slice(0,coordinatess.length-4))
-                        setCoordinates([[0,0],[0,0],[0,0],[0,0]])
-                    }}>Resetuj</button>}
+                <div style={{position:"relative",marginTop:xd+20}}>
+                        <button onClick={handleRemove}>Cofnij</button>
                     {categories.length>0 &&
-                    <Category index={index} setChosenCategory={setChosenCategory} categories={categories}></Category>
+                    <Category index={index} setChosenCategory={setCategory} categories={categories}></Category>
                     }
                     <p>Tagi:</p>
                     <form onSubmit={addTag}>
