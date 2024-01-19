@@ -7,8 +7,10 @@ import Category from "./Category.tsx";
 const DrawableImage = ({coco,chosenCategory,setCoco,categories,setChosenCategory,image,imageUrl,index})=> {
     const [category,setCategory] = useState<string>('');
     const [color,setColor] = useState<string>("red");
-    
-    
+
+    useEffect(() => {
+        console.log(color)
+    }, [color]);
     
     useEffect(() => {
         if (category===categories[0])
@@ -30,6 +32,7 @@ const DrawableImage = ({coco,chosenCategory,setCoco,categories,setChosenCategory
         if (category===categories[8])
             setColor("black")
     }, [category]);
+    
     useEffect(() => {
         setCategory(categories[0])
     }, []);
@@ -50,6 +53,7 @@ const DrawableImage = ({coco,chosenCategory,setCoco,categories,setChosenCategory
         setCoco([...coco,newCoco])
         setSubmit(true)
     }
+    
     const [i,setI] = useState(0);
     const [coordinates,setCoordinates] = useState([[0,0],[0,0],[0,0],[0,0]]);
     const [tags, setTags] = useState<Tags>()
