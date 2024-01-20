@@ -4,7 +4,7 @@ import {Tags} from "exifreader";
 import * as ExifReader from "exifreader";
 import Category from "./Category.tsx";
 
-const DrawableImage = ({data,tagss,annotationss,coco,chosenCategory,setCoco,categories,setChosenCategory,image,imageUrl,index})=> {
+const DrawableImage = ({counter,setCounter, data,tagss,annotationss,coco,chosenCategory,setCoco,categories,setChosenCategory,image,imageUrl,index})=> {
     const [category,setCategory] = useState<string>('');
     const [color,setColor] = useState<string>("red");
     const [imported,setImported] = useState<boolean>(false);
@@ -156,9 +156,16 @@ const DrawableImage = ({data,tagss,annotationss,coco,chosenCategory,setCoco,cate
             tags:imgTags,
             position: annotations
         }
+        let x = counter+1;
+        setCounter(x)
+        console.log("test")
+        console.log(counter)
+        console.log(index)
+        console.log("test")
         console.log(newCoco)
         setCoco([...coco,newCoco])
         setSubmit(true)
+        
     }
     
     const [i,setI] = useState(0);
@@ -304,7 +311,20 @@ const DrawableImage = ({data,tagss,annotationss,coco,chosenCategory,setCoco,cate
         e.preventDefault();
         drawRectangle2()
     }
+    const [seeTags,setSeeTags] = useState<boolean>(true)
+    const handleSeeTags = (e)=> {
+        e.preventDefault();
+        setSeeTags(!seeTags)
+    }
+    
+    const AreIndexAndCounterEqual = () => {
+        console.log(index)
+        console.log(counter)
+        return index === counter;
+    }
+    
     return (
+        <>
         <main>
             { !submit && <div style={{ position: "relative" ,display:"flex"}} >
                 <img 
@@ -321,14 +341,20 @@ const DrawableImage = ({data,tagss,annotationss,coco,chosenCategory,setCoco,cate
                     style={{ position: "absolute", top: 0, left: 0 ,marginTop:"3em"}}
                 ></canvas>
                 <div style={{position:"relative",marginTop:xd+20}}>
+                    <div style={{display:"flex"}}>
                         <button onClick={handleRemove}>Cofnij</button>
                     <form onSubmit={funkcja}>
                         <button type="submit">Odśwież</button>
                     </form>
+                    <form onSubmit={handleSeeTags}>
+                        <button type="submit">{seeTags? "Ukryj tagi" : "Pokaż tagi"}</button>
+                    </form>
+                    </div>
                     {categories.length>0 &&
                     <Category index={index} setChosenCategory={setCategory} categories={categories}></Category>
                     }
-                    <p>Tagi:</p>
+                    {seeTags &&<>
+                     <p>Tagi:</p>
                     <form onSubmit={addTag}>
                         <input type="text" placeholder="Klucz" value={key} onChange={(e)=>setKey(e.target.value)}/>
                         <input type="text" placeholder="Wartość" value={value} onChange={(e)=>setValue(e.target.value)}/>
@@ -338,13 +364,14 @@ const DrawableImage = ({data,tagss,annotationss,coco,chosenCategory,setCoco,cate
                         return <p key={index}>{tag.key} : {tag.value}</p>
                     }
                     )}
-
+                    </>}
                     <form onSubmit={handleSubmit}>
                         <button type="submit">Zapisz</button>
                     </form>
                 </div>
             </div>}
         </main>
+        </>
     );
 }
 

@@ -14,7 +14,7 @@ const ImageViewer = ({coco,chosenCategory,setCoco,setChosenCategory,categories,s
             reader.readAsDataURL(file);
         }
     }
-
+    const [counter,setCounter] = useState<number>(0)
     const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
         
     }
@@ -35,9 +35,10 @@ const ImageViewer = ({coco,chosenCategory,setCoco,setChosenCategory,categories,s
     return (
         <>
             <ImportButton setData={setData} ></ImportButton>
-        <div>
+            
+        <div style={{marginLeft:40}}>
             {imagesUrl.map((image, index) => (
-                <Image setCategories={setCategories} data={data} chosenCategory={chosenCategory} coco={coco} setCoco={setCoco} setChosenCategory={setChosenCategory} categories={categories} index={index} key={index} image={images[index]} imageUrl={image}/>
+                <Image counter={counter} setCounter={setCounter} setCategories={setCategories} data={data} chosenCategory={chosenCategory} coco={coco} setCoco={setCoco} setChosenCategory={setChosenCategory} categories={categories} index={index} key={index} image={images[index]} imageUrl={image}/>
             ))}
         </div>
         </>
