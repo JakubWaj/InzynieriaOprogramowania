@@ -1,10 +1,36 @@
-﻿import React from 'react';
+﻿import React, {useState} from 'react';
 
-const ImportButton = ({importcoco}) => {
+const ImportButton = ({setData}) => {
+    const [jsonContent, setJsonContent] = useState('');
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const jsonContent = e.target.result;
+                setJsonContent(jsonContent);
+
+                try {
+                    setData(JSON.parse(jsonContent));
+                    const jsonObject = JSON.parse(jsonContent);
+                    console.log('Parsed JSON:', jsonObject);
+                } catch (error) {
+                    console.error('Błąd parsowania JSON:', error);
+                }
+            };
+
+            reader.readAsText(file);
+        }
+    };
+
     return (
-        <form className="importcoco" onSubmit={importcoco}>
-            <button typeof="submit" type="submit">Import</button>
-        </form>
+        <div className="App">
+            <button onClick={() => document.getElementById('fileInput').click()}>Wczytaj JSON</button>
+            <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleFileChange} />
+        </div>
     );
 };
 

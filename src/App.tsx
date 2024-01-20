@@ -8,6 +8,7 @@ import Category from "./components/Category.tsx";
 import ButtonCoco from "./components/ButtonCoco.tsx";
 import logo from './assets/logo.png';
 import CategoryList from "./components/CategoryList.tsx";
+import ImportButton from "./components/ImportButton.tsx";
 function App() {
     
   const [coco, setCoco] = useState<
@@ -61,7 +62,7 @@ function App() {
     function calculateArea(x1, y1, x2, y2, x3, y3, x4, y4) {
         const base1 = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
         const base2 = Math.sqrt(Math.pow(x4 - x3, 2) + Math.pow(y4 - y3, 2));
-        const height = Math.abs(y2 - y1); // Załóżmy, że wysokość bierze się z jednej z podstaw (możesz dostosować w zależności od potrzeb)
+        const height = Math.abs(y2 - y1);
 
         const area = 0.5 * (base1 + base2) * height;
         return area;
@@ -165,7 +166,7 @@ function App() {
         { !setted&& <>
         {!isImageSelected && <ImageUploader setIsImageSelected={setIsImageSelected} images={selectedImages}  setImages={setSelectedImages} />}
         {selectedImages.length > 0 && 
-      <ImageViewer coco={coco} chosenCategory={chosenCategory} setCoco={setCoco} setChosenCategory={setChosenCategory}  categories={categories} images={selectedImages} imagesUrl={selectedImagesURL}/>}
+      <ImageViewer setCategories={setCategories} coco={coco} chosenCategory={chosenCategory} setCoco={setCoco} setChosenCategory={setChosenCategory}  categories={categories} images={selectedImages} imagesUrl={selectedImagesURL}/>}
         <ButtonCoco exportToCoco={exportToCoco}></ButtonCoco>
         </>}
     </div>

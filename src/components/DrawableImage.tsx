@@ -4,13 +4,120 @@ import {Tags} from "exifreader";
 import * as ExifReader from "exifreader";
 import Category from "./Category.tsx";
 
-const DrawableImage = ({coco,chosenCategory,setCoco,categories,setChosenCategory,image,imageUrl,index})=> {
+const DrawableImage = ({data,tagss,annotationss,coco,chosenCategory,setCoco,categories,setChosenCategory,image,imageUrl,index})=> {
     const [category,setCategory] = useState<string>('');
     const [color,setColor] = useState<string>("red");
-
+    const [imported,setImported] = useState<boolean>(false);
     useEffect(() => {
         console.log(color)
     }, [color]);
+
+    useEffect(() => {
+        let x1 = []
+        for (let i = 0; i < annotationss.length; i++) {
+            let obj = annotationss[i];
+            x1.push(
+                {coordinate:{x1:obj.coordinate.x1,y1:obj.coordinate.y1,x2:obj.coordinate.x2,x3:obj.coordinate.x3,x4:obj.coordinate.x4,y2:obj.coordinate.y2,y3:obj.coordinate.y3,y4:obj.coordinate.y4},
+                    category:obj.category}
+            )
+        }
+        setAnnotations(x1)
+        let x2 = []
+        for (let i = 0; i < annotationss.length; i++) {
+            let obj = annotationss[i];
+            let color = ""
+            if (obj.category === categories[0])
+                color = "red"
+            if (obj.category === categories[1])
+                color = "blue"
+            if (obj.category === categories[2])
+                color = "green"
+            if (obj.category === categories[3])
+                color = "yellow"
+            if (obj.category === categories[4])
+                color = "purple"
+            if (obj.category === categories[5])
+                color = "orange"
+            if (obj.category === categories[6])
+                color = "brown"
+            if (obj.category === categories[7])
+                color = "pink"
+            if (obj.category === categories[8])
+                color = "black"
+            x2.push(
+                {x1:obj.coordinate.x1,y1:obj.coordinate.y1,x2:obj.coordinate.x2,x3:obj.coordinate.x3,x4:obj.coordinate.x4,y2:obj.coordinate.y2,y3:obj.coordinate.y3,y4:obj.coordinate.y4,
+                    color:color}
+            )
+        }
+        setDraws(x2)
+        let x3 = []
+        for (let i = 0; i < tagss.length; i++) {
+            let obj = tagss[i];
+            x3.push(
+                {key:obj.key,value:obj.value}
+            )
+        }
+        setImgTags(x3)
+        console.log(draws)
+        console.log(annotations)
+        console.log(imgTags)
+        setImported(true);
+    }, [data]);
+    useEffect(() => {
+        drawRectangle3()
+    }, [imported]);
+    const funkcja = (e) => {
+        e.preventDefault()
+        let x1 = []
+        for (let i = 0; i < annotationss.length; i++) {
+            let obj = annotationss[i];
+            x1.push(
+                {coordinate:{x1:obj.coordinate.x1,y1:obj.coordinate.y1,x2:obj.coordinate.x2,x3:obj.coordinate.x3,x4:obj.coordinate.x4,y2:obj.coordinate.y2,y3:obj.coordinate.y3,y4:obj.coordinate.y4},
+                category:obj.category}
+            )
+        }
+        setAnnotations(x1)
+        let x2 = []
+        for (let i = 0; i < annotationss.length; i++) {
+            let obj = annotationss[i];
+            let color = ""
+            if (obj.category === categories[0])
+                color = "red"
+            if (obj.category === categories[1])
+                color = "blue"
+            if (obj.category === categories[2])
+                color = "green"
+            if (obj.category === categories[3])
+                color = "yellow"
+            if (obj.category === categories[4])
+                color = "purple"
+            if (obj.category === categories[5])
+                color = "orange"
+            if (obj.category === categories[6])
+                color = "brown"
+            if (obj.category === categories[7])
+                color = "pink"
+            if (obj.category === categories[8])
+                color = "black"
+            x2.push(
+                {x1:obj.coordinate.x1,y1:obj.coordinate.y1,x2:obj.coordinate.x2,x3:obj.coordinate.x3,x4:obj.coordinate.x4,y2:obj.coordinate.y2,y3:obj.coordinate.y3,y4:obj.coordinate.y4,
+                    color:color}
+            )
+        }
+        setDraws(x2)
+        let x3 = []
+        for (let i = 0; i < tagss.length; i++) {
+            let obj = tagss[i];
+            x3.push(
+                {key:obj.key,value:obj.value}
+            )
+        }
+        setImgTags(x3)
+        console.log(draws)
+        console.log(annotations)
+        console.log(imgTags)    
+        drawRectangle3()
+    };
     
     useEffect(() => {
         if (category===categories[0])
@@ -152,12 +259,14 @@ const DrawableImage = ({coco,chosenCategory,setCoco,categories,setChosenCategory
     };
 
     const drawRectangle2 = () => {
+            console.log("wchodzi cos?")
             //remove last element from draws
             draws.pop()
             //remove last element from annotations
             annotations.pop()
             context.clearRect(0, 0, imageRef.current?.width || 0, imageRef.current?.height || 0)
             for(let i =0;i<draws.length;i++) {
+                console.log(i)
             context.beginPath();
             context.moveTo(draws[i].x1, draws[i].y1);
             context.lineTo(draws[i].x2, draws[i].y2);
@@ -169,7 +278,20 @@ const DrawableImage = ({coco,chosenCategory,setCoco,categories,setChosenCategory
             context.stroke();
             }
     };
-    
+
+    const drawRectangle3 = () => {
+        for(let i =0;i<draws.length;i++) {
+            context.beginPath();
+            context.moveTo(draws[i].x1, draws[i].y1);
+            context.lineTo(draws[i].x2, draws[i].y2);
+            context.lineTo(draws[i].x3, draws[i].y3);
+            context.lineTo(draws[i].x4, draws[i].y4);
+            context.closePath();
+            context.strokeStyle = draws[i].color;
+            context.lineWidth = 2;
+            context.stroke();
+        }
+    };
     
     useEffect(() => {
         console.log(annotations)
@@ -200,6 +322,9 @@ const DrawableImage = ({coco,chosenCategory,setCoco,categories,setChosenCategory
                 ></canvas>
                 <div style={{position:"relative",marginTop:xd+20}}>
                         <button onClick={handleRemove}>Cofnij</button>
+                    <form onSubmit={funkcja}>
+                        <button type="submit">Odśwież</button>
+                    </form>
                     {categories.length>0 &&
                     <Category index={index} setChosenCategory={setCategory} categories={categories}></Category>
                     }
@@ -213,6 +338,7 @@ const DrawableImage = ({coco,chosenCategory,setCoco,categories,setChosenCategory
                         return <p key={index}>{tag.key} : {tag.value}</p>
                     }
                     )}
+
                     <form onSubmit={handleSubmit}>
                         <button type="submit">Zapisz</button>
                     </form>

@@ -13,7 +13,7 @@ const Info = ({image}) => {
     
     return (
         <div onClick={onclick}>
-            <p>Infor</p>
+            <p>Info</p>
             {clicked && (<main>
 {/*            <p>Rozmiar: {tags['Bits Per Sample'].description}</p>*/}
             <p>Rozmiar: {tags['Image Width'].value}</p>
