@@ -125,6 +125,72 @@ function App() {
         console.log(object)
         return object
     }
+
+    const handleText = ()=> {
+        let textContent = '';
+        coco.forEach((image) => {
+            textContent += `Nazwa pliku: ${image.file_name}\n`;
+            textContent += `Rozmiar: ${image.width}x${image.height}\n`;
+            textContent += `Tagi: ${image.tags.map((tag) => tag.value).join(', ')}\n`;
+            textContent += `Obiekty:\n`;
+            image.position.forEach((pos) => {
+                textContent += `    Kategoria: ${pos.category}\n`;
+                textContent += `    Współrzędne: (${pos.coordinate.x1}, ${pos.coordinate.y1}), (${pos.coordinate.x2}, ${pos.coordinate.y2}), (${pos.coordinate.x3}, ${pos.coordinate.y3}), (${pos.coordinate.x4}, ${pos.coordinate.y4})\n`;
+            });
+            textContent += '\n';
+        });
+        //count how many times each tag appears 
+        const tags = {};
+        coco.forEach((image) => {
+            image.tags.forEach((tag) => {
+                if (tags[tag.value]) {
+                    tags[tag.value]++;
+                } else {
+                    tags[tag.value] = 1;
+                }
+            });
+        });
+        textContent += `Tagi:\n`;
+        Object.keys(tags).forEach((tag) => {
+            textContent += `    ${tag}: ${tags[tag]}\n`;
+        });
+        //count how many times each category appears
+        const categories = {};
+        coco.forEach((image) => {
+            image.position.forEach((pos) => {
+                if (categories[pos.category]) {
+                    categories[pos.category]++;
+                } else {
+                    categories[pos.category] = 1;
+                }
+            });
+        });
+        textContent += `Kategorie:\n`;
+        Object.keys(categories).forEach((category) => {
+            textContent += `    ${category}: ${categories[category]}\n`;
+        });
+        return textContent;
+    }
+    
+    const exportToTxtFile = (e) => {
+        e.preventDefault();
+        const textContent = handleText(); 
+        console.log(textContent);
+
+        const blob = new Blob([textContent], { type: 'text/plain' }); 
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'statystyka.txt';
+        document.body.appendChild(link);
+
+        link.click();
+
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
+    
     
     const exportToCoco = (e: React.FormEvent<HTMLFormElement>)=> {
         e.preventDefault();
@@ -142,6 +208,7 @@ function App() {
         link.click();
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
+        exportToTxtFile(e);
         window.location.reload();
     }
     const handleDatasetName = (e: React.FormEvent<HTMLFormElement>) => {
@@ -168,6 +235,9 @@ function App() {
         {selectedImages.length > 0 && 
       <ImageViewer setCategories={setCategories} coco={coco} chosenCategory={chosenCategory} setCoco={setCoco} setChosenCategory={setChosenCategory}  categories={categories} images={selectedImages} imagesUrl={selectedImagesURL}/>}
         <ButtonCoco exportToCoco={exportToCoco}></ButtonCoco>
+{/*            <form onSubmit={exportToTxtFile}>
+                <button style={{marginLeft:40+"px"}}>Statystyki</button>
+            </form>*/}
         </>}
     </div>
   )

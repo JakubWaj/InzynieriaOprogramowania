@@ -8,9 +8,14 @@ const DrawableImage = ({length,counter2,setCounter2,counter,setCounter, data,tag
     const [category,setCategory] = useState<string>('');
     const [color,setColor] = useState<string>("red");
     const [imported,setImported] = useState<boolean>(false);
+    const [show,setShow] = useState<boolean>(false);
     useEffect(() => {
         console.log(color)
     }, [color]);
+
+    useEffect(() => {
+        
+    }, []);
 
     useEffect(() => {
         let x1 = []
@@ -247,6 +252,7 @@ const DrawableImage = ({length,counter2,setCounter2,counter,setCounter, data,tag
         setCounter2(counter2+1)
     };
     
+    
     useEffect(() => {
         if (category===categories[0])
             setColor("red")
@@ -474,7 +480,10 @@ const DrawableImage = ({length,counter2,setCounter2,counter,setCounter, data,tag
         e.preventDefault();
         setSeeTags(!seeTags)
     }
-    
+    const handleSeeDodatkowe = (e)=> {
+        e.preventDefault();
+        setShow(!show)
+    }
     const AreIndexAndCounterEqual = () => {
         return index === counter;
     }
@@ -504,12 +513,16 @@ const DrawableImage = ({length,counter2,setCounter2,counter,setCounter, data,tag
                         <button type="submit">{counter2===0?"Pokaż tagi":"Pokaż rysunki"}</button>
                     </form>}
                     <form onSubmit={handleSeeTags}>
-                        <button type="submit">{seeTags? "Ukryj dodatkowe informacje o Zdjęciu" : "Pokaż dodatkowe informacje o Zdjęciu"}</button>
+                        <button type="submit">{seeTags? "Ukryj" : "Dodaj Informacje o zdjeciu"}</button>
                     </form>
+                        <form onSubmit={handleSeeDodatkowe}>
+                        <button type="submit">{show ? "ukryj metadane" : "pokaż metadane"}</button>
+                        </form>
                     </div>
                     {categories.length>0 &&
                     <Category index={index} setChosenCategory={setCategory} categories={categories}></Category>
                     }
+                    
                     {seeTags &&<>
                      <p>Dodatkowe Informacje o zdjeciu:</p>
                     <form onSubmit={addTag}>
