@@ -38,7 +38,7 @@ const ImageUploader = ({images,setImages,setIsImageSelected}) => {
     };
     
     return (
-        <div>
+        <div style={{marginLeft:40+"px",marginBottom:20+"px"}}>
             <input
             type="file"
             accept="image/*"

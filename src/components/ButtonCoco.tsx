@@ -3,7 +3,7 @@
 const ButtonCoco = ({exportToCoco}) => {
     return (
         <form className="coco" onSubmit={exportToCoco}>
-            <button typeof="submit" type="submit">Export to coco</button>
+            <button style={{marginLeft:40+"px"}} typeof="submit" type="submit">Export to coco</button>
         </form>
     );
 };

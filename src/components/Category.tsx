@@ -12,7 +12,8 @@ const Category = ({ setChosenCategory, index, categories }) => {
         },
         label: {
             marginBottom: '8px',
-            fontSize: '16px',
+            fontSize: '24px',
+            
         },
         select: {
             padding: '8px',

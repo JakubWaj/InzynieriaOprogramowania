@@ -51,10 +51,10 @@ const ImageViewer = ({coco,chosenCategory,setCoco,setChosenCategory,categories,s
     return (
         <>
         { !yes && <>
-            <p>Czy chcesz zaimportowac zdjęcia?</p>
+            <p style={{marginLeft:40+"px"}}>Czy chcesz zaimportowac zdjęcia?</p>
             <ImportButton setYes={setYes} setData={setData} ></ImportButton>
             <form onSubmit={handleYes}>
-                <button>Nie</button>
+                <button style={{marginLeft:40+"px"}}>Nie</button>
             </form>
             </>}
             {yes && <div style={{marginLeft:40}}>

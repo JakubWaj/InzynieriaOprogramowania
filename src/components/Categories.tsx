@@ -2,7 +2,7 @@
 
 const Categories = ({handleCategory,category,setCategory}) => {
     return (
-        <form className="category" onSubmit={handleCategory}>
+        <form style={{marginLeft:40+"px"}} className="category" onSubmit={handleCategory}>
             <label htmlFor="category">Kategoria</label>
             <input type="text" value={category} onChange={(e)=>setCategory(e.target.value)} />
             <button typeof="submit" type="submit">Dodaj</button>

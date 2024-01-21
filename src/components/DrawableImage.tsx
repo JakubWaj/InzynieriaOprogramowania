@@ -44,6 +44,30 @@ const DrawableImage = ({length,counter2,setCounter2,counter,setCounter, data,tag
                 color = "pink"
             if (obj.category === categories[8])
                 color = "black"
+            if (obj.category===categories[9])
+                color = "white"
+            if (obj.category===categories[10])
+                color = "gray"
+            if (obj.category===categories[11])
+                color = "cyan"
+            if (obj.category===categories[12])
+                color = "magenta"
+            if (obj.category===categories[13])
+                color = "lime"
+            if (obj.category===categories[14])
+                color = "olive"
+            if (obj.category===categories[15])
+                color = "maroon"
+            if (obj.category===categories[16])
+                color = "navy"
+            if (obj.category===categories[17])
+                color = "teal"
+            if (obj.category===categories[18])
+                color = "silver"
+            if (obj.category===categories[19])
+                color = "gold"
+            if (obj.category===categories[20])
+                color = "azure"
             x2.push(
                 {x1:obj.coordinate.x1,y1:obj.coordinate.y1,x2:obj.coordinate.x2,x3:obj.coordinate.x3,x4:obj.coordinate.x4,y2:obj.coordinate.y2,y3:obj.coordinate.y3,y4:obj.coordinate.y4,
                     color:color}
@@ -99,6 +123,30 @@ const DrawableImage = ({length,counter2,setCounter2,counter,setCounter, data,tag
                 color = "pink"
             if (obj.category === categories[8])
                 color = "black"
+            if (obj.category===categories[9])
+                color = "white"
+            if (obj.category===categories[10])
+                color = "gray"
+            if (obj.category===categories[11])
+                color = "cyan"
+            if (obj.category===categories[12])
+                color = "magenta"
+            if (obj.category===categories[13])
+                color = "lime"
+            if (obj.category===categories[14])
+                color = "olive"
+            if (obj.category===categories[15])
+                color = "maroon"
+            if (obj.category===categories[16])
+                color = "navy"
+            if (obj.category===categories[17])
+                color = "teal"
+            if (obj.category===categories[18])
+                color = "silver"
+            if (obj.category===categories[19])
+                color = "gold"
+            if (obj.category===categories[20])
+                color = "azure"
             x2.push(
                 {x1:obj.coordinate.x1,y1:obj.coordinate.y1,x2:obj.coordinate.x2,x3:obj.coordinate.x3,x4:obj.coordinate.x4,y2:obj.coordinate.y2,y3:obj.coordinate.y3,y4:obj.coordinate.y4,
                     color:color}
@@ -154,6 +202,30 @@ const DrawableImage = ({length,counter2,setCounter2,counter,setCounter, data,tag
                 color = "pink"
             if (obj.category === categories[8])
                 color = "black"
+            if (obj.category===categories[9])
+                color = "white"
+            if (obj.category===categories[10])
+                color = "gray"
+            if (obj.category===categories[11])
+                color = "cyan"
+            if (obj.category===categories[12])
+                color = "magenta"
+            if (obj.category===categories[13])
+                color = "lime"
+            if (obj.category===categories[14])
+                color = "olive"
+            if (obj.category===categories[15])
+                color = "maroon"
+            if (obj.category===categories[16])
+                color = "navy"
+            if (obj.category===categories[17])
+                color = "teal"
+            if (obj.category===categories[18])
+                color = "silver"
+            if (obj.category===categories[19])
+                color = "gold"
+            if (obj.category===categories[20])
+                color = "azure"
             x2.push(
                 {x1:obj.coordinate.x1,y1:obj.coordinate.y1,x2:obj.coordinate.x2,x3:obj.coordinate.x3,x4:obj.coordinate.x4,y2:obj.coordinate.y2,y3:obj.coordinate.y3,y4:obj.coordinate.y4,
                     color:color}
@@ -194,6 +266,30 @@ const DrawableImage = ({length,counter2,setCounter2,counter,setCounter, data,tag
             setColor("pink")
         if (category===categories[8])
             setColor("black")
+        if (category===categories[9])
+            setColor("white")
+        if (category===categories[10])
+            setColor("gray")
+        if (category===categories[11])
+            setColor("cyan")
+        if (category===categories[12])
+            setColor("magenta")
+        if (category===categories[13])
+            setColor("lime")
+        if (category===categories[14])
+            setColor("olive")
+        if (category===categories[15])
+            setColor("maroon")
+        if (category===categories[16])
+            setColor("navy")
+        if (category===categories[17])
+            setColor("teal")
+        if (category===categories[18])
+            setColor("silver")
+        if (category===categories[19])
+            setColor("gold")
+        if (category===categories[20])
+            setColor("azure")
     }, [category]);
     
     useEffect(() => {
@@ -241,7 +337,13 @@ const DrawableImage = ({length,counter2,setCounter2,counter,setCounter, data,tag
             return
         if (value === '')
             return
+        if (imgTags.filter((tag)=>tag.key===key).length>0)
+            return
+        if (imgTags.filter((tag)=>tag.value===value).length>0)
+            return
         setImgTags([...imgTags,{key:key,value:value}])
+        setKey('')
+        setValue('')
     }
     
     useEffect(()=>{
@@ -402,14 +504,14 @@ const DrawableImage = ({length,counter2,setCounter2,counter,setCounter, data,tag
                         <button type="submit">{counter2===0?"Pokaż tagi":"Pokaż rysunki"}</button>
                     </form>}
                     <form onSubmit={handleSeeTags}>
-                        <button type="submit">{seeTags? "Ukryj tagi" : "Pokaż tagi"}</button>
+                        <button type="submit">{seeTags? "Ukryj dodatkowe informacje o Zdjęciu" : "Pokaż dodatkowe informacje o Zdjęciu"}</button>
                     </form>
                     </div>
                     {categories.length>0 &&
                     <Category index={index} setChosenCategory={setCategory} categories={categories}></Category>
                     }
                     {seeTags &&<>
-                     <p>Tagi:</p>
+                     <p>Dodatkowe Informacje o zdjeciu:</p>
                     <form onSubmit={addTag}>
                         <input type="text" placeholder="Klucz" value={key} onChange={(e)=>setKey(e.target.value)}/>
                         <input type="text" placeholder="Wartość" value={value} onChange={(e)=>setValue(e.target.value)}/>

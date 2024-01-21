@@ -31,8 +31,8 @@ const ImportButton = ({setData,setYes}) => {
     };
 
     return (
-        <div className="App">
-            <button onClick={() => document.getElementById('fileInput').click()}>Wczytaj JSON</button>
+        <div style={{marginLeft:40+"px"}} className="App">
+            <button  onClick={() => document.getElementById('fileInput').click()}>Wczytaj JSON</button>
             <input type="file" id="fileInput" style={{ display: 'none' }} onChange={handleFileChange} />
         </div>
     );

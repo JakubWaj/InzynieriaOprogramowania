@@ -161,7 +161,7 @@ function App() {
          <Categories handleCategory={handleCategory} category={category} setCategory={setCategory}></Categories>
             <CategoryList categories={categories}></CategoryList>
     <form onSubmit={handleEntry}>
-            <button disabled={name.trim().length === 0 || categories.length===0}>Dalej</button>
+            <button style={{marginLeft:40+"px"}} disabled={name.trim().length === 0 || categories.length===0}>Dalej</button>
         </form></>}
         { !setted&& <>
         {!isImageSelected && <ImageUploader setIsImageSelected={setIsImageSelected} images={selectedImages}  setImages={setSelectedImages} />}

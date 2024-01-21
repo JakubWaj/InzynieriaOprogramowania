@@ -3,9 +3,9 @@
 const CategoryList = ({categories}) => {
     return (
         <>
-            <h2>Kategorie</h2>
+            <h2 style={{marginLeft:40+"px"}}>Kategorie</h2>
             {categories.map((category, index) => (
-                <p key={index}>{category}</p>
+                <p  style={{marginLeft:40+"px"}} key={index}>{category}</p>
             ))}
         </>
     );
