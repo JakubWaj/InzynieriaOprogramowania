@@ -6,11 +6,36 @@ interface PropsForImageUploader {
 }
 
 const ImageUploader = ({images,setImages,setIsImageSelected}) => {
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageChange = async (e) => {
         const files = e.target.files;
-        setImages(files);
+
+        // Przygotuj funkcję do sprawdzania szerokości obrazu
+        const checkImageWidth = (file) => {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => {
+                    const width = img.width;
+                    resolve(width);
+                };
+                img.onerror = (error) => reject(error);
+                img.src = URL.createObjectURL(file);
+            });
+        };
+
+        // Filtruj obrazy według szerokości
+        const filteredImages = [];
+        for (const file of files) {
+            const width:any = await checkImageWidth(file);
+            if (width <= 2400) {
+                filteredImages.push(file);
+            }
+        }
+
+        // Ustaw nową tablicę obrazów
+        setImages(filteredImages);
+
         setIsImageSelected(true);
-    }
+    };
     
     return (
         <div>

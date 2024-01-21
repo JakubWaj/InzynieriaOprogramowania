@@ -1,6 +1,6 @@
 ﻿import React, {useState} from 'react';
 
-const ImportButton = ({setData}) => {
+const ImportButton = ({setData,setYes}) => {
     const [jsonContent, setJsonContent] = useState('');
 
     const handleFileChange = (event) => {
@@ -11,10 +11,13 @@ const ImportButton = ({setData}) => {
 
             reader.onload = function (e) {
                 const jsonContent = e.target.result;
+                // @ts-ignore
                 setJsonContent(jsonContent);
 
                 try {
+                    // @ts-ignore
                     setData(JSON.parse(jsonContent));
+                    // @ts-ignore
                     const jsonObject = JSON.parse(jsonContent);
                     console.log('Parsed JSON:', jsonObject);
                 } catch (error) {
@@ -23,6 +26,7 @@ const ImportButton = ({setData}) => {
             };
 
             reader.readAsText(file);
+            setYes(true)
         }
     };
 

@@ -13,8 +13,17 @@ const ImageViewer = ({coco,chosenCategory,setCoco,setChosenCategory,categories,s
             const reader = new FileReader();
             reader.readAsDataURL(file);
         }
+ 
     }
+
+    useEffect(() => {
+        console.log(images.length)
+        setLength(images.length)
+    }, [images]);
+    
+    const [length,setLength] = useState<number>(0)
     const [counter,setCounter] = useState<number>(0)
+    const [counter2,setCounter2] = useState<number>(0)
     const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
         
     }
@@ -32,15 +41,27 @@ const ImageViewer = ({coco,chosenCategory,setCoco,setChosenCategory,categories,s
         setCategories(XDDX)
     }, [data]);
     
+    const [yes,setYes] = useState<boolean>(false)
+    const handleYes = (e) => {
+        e.preventDefault()
+        setYes(!yes)
+        setCounter2(2);
+    }
+    
     return (
         <>
-            <ImportButton setData={setData} ></ImportButton>
-            
-        <div style={{marginLeft:40}}>
+        { !yes && <>
+            <p>Czy chcesz zaimportowac zdjęcia?</p>
+            <ImportButton setYes={setYes} setData={setData} ></ImportButton>
+            <form onSubmit={handleYes}>
+                <button>Nie</button>
+            </form>
+            </>}
+            {yes && <div style={{marginLeft:40}}>
             {imagesUrl.map((image, index) => (
-                <Image counter={counter} setCounter={setCounter} setCategories={setCategories} data={data} chosenCategory={chosenCategory} coco={coco} setCoco={setCoco} setChosenCategory={setChosenCategory} categories={categories} index={index} key={index} image={images[index]} imageUrl={image}/>
+                <Image length={length} counter2={counter2} setCounter2={setCounter2} counter={counter} setCounter={setCounter} setCategories={setCategories} data={data} chosenCategory={chosenCategory} coco={coco} setCoco={setCoco} setChosenCategory={setChosenCategory} categories={categories} index={index} key={index} image={images[index]} imageUrl={image}/>
             ))}
-        </div>
+        </div>}
         </>
     );
 }

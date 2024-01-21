@@ -3,7 +3,7 @@ import Form from "./Form.tsx";
 import Info from "./Info.tsx";
 import DrawableImage from "./DrawableImage.tsx";
 
-const Image = ({counter,setCounter,data,coco,chosenCategory,setCoco,setChosenCategory,categories,setCategories,imageUrl,index,image}) => {
+const Image = ({length,setCounter2,counter2,counter,setCounter,data,coco,chosenCategory,setCoco,setChosenCategory,categories,setCategories,imageUrl,index,image}) => {
     
     const [annotations,setAnnotations] = useState<any[]>([])
     const [imgTags,setImgTags] = useState<{key:string,value:string}[]>([])
@@ -33,7 +33,7 @@ const Image = ({counter,setCounter,data,coco,chosenCategory,setCoco,setChosenCat
     
     return (
         <div style={{position:"relative"}}>
-            {counter===index && <DrawableImage counter={counter} setCounter={setCounter} data={data} tagss={imgTags} annotationss={annotations} coco={coco} chosenCategory={chosenCategory} setCoco={setCoco} setChosenCategory={setChosenCategory} categories={categories} image={image} imageUrl={imageUrl} index={index}/>}
+            {counter===index && <DrawableImage length={length} setCounter2={setCounter2} counter2={counter2} counter={counter} setCounter={setCounter} data={data} tagss={imgTags} annotationss={annotations} coco={coco} chosenCategory={chosenCategory} setCoco={setCoco} setChosenCategory={setChosenCategory} categories={categories} image={image} imageUrl={imageUrl} index={index}/>}
         </div>
     );
 };

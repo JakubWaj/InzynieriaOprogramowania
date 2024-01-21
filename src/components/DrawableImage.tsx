@@ -4,7 +4,7 @@ import {Tags} from "exifreader";
 import * as ExifReader from "exifreader";
 import Category from "./Category.tsx";
 
-const DrawableImage = ({counter,setCounter, data,tagss,annotationss,coco,chosenCategory,setCoco,categories,setChosenCategory,image,imageUrl,index})=> {
+const DrawableImage = ({length,counter2,setCounter2,counter,setCounter, data,tagss,annotationss,coco,chosenCategory,setCoco,categories,setChosenCategory,image,imageUrl,index})=> {
     const [category,setCategory] = useState<string>('');
     const [color,setColor] = useState<string>("red");
     const [imported,setImported] = useState<boolean>(false);
@@ -66,6 +66,61 @@ const DrawableImage = ({counter,setCounter, data,tagss,annotationss,coco,chosenC
     useEffect(() => {
         drawRectangle3()
     }, [imported]);
+
+    const funkcja2 = () => {
+        let x1 = []
+        for (let i = 0; i < annotationss.length; i++) {
+            let obj = annotationss[i];
+            x1.push(
+                {coordinate:{x1:obj.coordinate.x1,y1:obj.coordinate.y1,x2:obj.coordinate.x2,x3:obj.coordinate.x3,x4:obj.coordinate.x4,y2:obj.coordinate.y2,y3:obj.coordinate.y3,y4:obj.coordinate.y4},
+                    category:obj.category}
+            )
+        }
+        setAnnotations(x1)
+        let x2 = []
+        for (let i = 0; i < annotationss.length; i++) {
+            let obj = annotationss[i];
+            let color = ""
+            if (obj.category === categories[0])
+                color = "red"
+            if (obj.category === categories[1])
+                color = "blue"
+            if (obj.category === categories[2])
+                color = "green"
+            if (obj.category === categories[3])
+                color = "yellow"
+            if (obj.category === categories[4])
+                color = "purple"
+            if (obj.category === categories[5])
+                color = "orange"
+            if (obj.category === categories[6])
+                color = "brown"
+            if (obj.category === categories[7])
+                color = "pink"
+            if (obj.category === categories[8])
+                color = "black"
+            x2.push(
+                {x1:obj.coordinate.x1,y1:obj.coordinate.y1,x2:obj.coordinate.x2,x3:obj.coordinate.x3,x4:obj.coordinate.x4,y2:obj.coordinate.y2,y3:obj.coordinate.y3,y4:obj.coordinate.y4,
+                    color:color}
+            )
+        }
+        setDraws(x2)
+        let x3 = []
+        for (let i = 0; i < tagss.length; i++) {
+            let obj = tagss[i];
+            x3.push(
+                {key:obj.key,value:obj.value}
+            )
+        }
+        setImgTags(x3)
+        console.log("test")
+        console.log(draws)
+        console.log(annotations)
+        console.log(imgTags)
+        console.log("test")
+        drawRectangle3()
+    };
+    
     const funkcja = (e) => {
         e.preventDefault()
         let x1 = []
@@ -117,6 +172,7 @@ const DrawableImage = ({counter,setCounter, data,tagss,annotationss,coco,chosenC
         console.log(annotations)
         console.log(imgTags)    
         drawRectangle3()
+        setCounter2(counter2+1)
     };
     
     useEffect(() => {
@@ -318,14 +374,13 @@ const DrawableImage = ({counter,setCounter, data,tagss,annotationss,coco,chosenC
     }
     
     const AreIndexAndCounterEqual = () => {
-        console.log(index)
-        console.log(counter)
         return index === counter;
     }
     
     return (
         <>
         <main>
+            <h4>Obrazek {index+1} z {length}</h4>
             { !submit && <div style={{ position: "relative" ,display:"flex"}} >
                 <img 
                     ref={imageRef}
@@ -343,9 +398,9 @@ const DrawableImage = ({counter,setCounter, data,tagss,annotationss,coco,chosenC
                 <div style={{position:"relative",marginTop:xd+20}}>
                     <div style={{display:"flex"}}>
                         <button onClick={handleRemove}>Cofnij</button>
-                    <form onSubmit={funkcja}>
-                        <button type="submit">Odśwież</button>
-                    </form>
+                        {!(counter2===2) && <form onSubmit={funkcja}>
+                        <button type="submit">{counter2===0?"Pokaż tagi":"Pokaż rysunki"}</button>
+                    </form>}
                     <form onSubmit={handleSeeTags}>
                         <button type="submit">{seeTags? "Ukryj tagi" : "Pokaż tagi"}</button>
                     </form>
