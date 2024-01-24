@@ -522,7 +522,11 @@ const DrawableImage = ({length,counter2,setCounter2,counter,setCounter, data,tag
                     {categories.length>0 &&
                     <Category index={index} setChosenCategory={setCategory} categories={categories}></Category>
                     }
-                    
+                    {show && <>
+                    <p>Metadane:</p>
+                    <p>Image Height: {tags && tags['Image Height'].value}</p>
+                    <p>Image Width: {tags && tags['Image Width'].value}</p>
+                    </>}
                     {seeTags &&<>
                      <p>Dodatkowe Informacje o zdjeciu:</p>
                     <form onSubmit={addTag}>

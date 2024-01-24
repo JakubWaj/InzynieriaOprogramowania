@@ -7,6 +7,7 @@ import Categories from "./components/Categories.tsx";
 import Category from "./components/Category.tsx";
 import ButtonCoco from "./components/ButtonCoco.tsx";
 import logo from './assets/logo.png';
+import page from './assets/page.png';
 import CategoryList from "./components/CategoryList.tsx";
 import ImportButton from "./components/ImportButton.tsx";
 function App() {
@@ -220,8 +221,16 @@ function App() {
         e.preventDefault();
         setSetted(false)
     }
+    const [firstPage,setFirstPage] = useState<boolean>(true)
+    
+    
   return (
     <div className="App">
+        {firstPage ? <>
+        <img onClick={()=>setFirstPage(false)} src={page}></img>
+        </> :<>
+        
+        
         {/*<img src={logo} alt="logo" style={{top:0,right:0,height:"auto",position:"fixed"}}></img>*/}
         { setted && <>
         <DatasetName handleDatasetName={handleDatasetName} setName={setName} name={name}></DatasetName>
@@ -239,7 +248,9 @@ function App() {
                 <button style={{marginLeft:40+"px"}}>Statystyki</button>
             </form>*/}
         </>}
+        </>}
     </div>
+            
   )
 }
 
